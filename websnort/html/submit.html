@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="page-header">
+        <h3>Submit PCAP</h3>
+    </div>
+    <div class="submit">
+        <form method="post" action="/submit" class="form-horizontal" enctype="multipart/form-data">
+   			<fieldset>
+                <div class="control-group">
+                    <label class="control-label" for="infile">File to upload</label>
+                    <div class="controls">
+                        <input type="file" name="file" class="input-xlarge filestyle" data-icon="false" id="infile" />
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn">Cancel</button>
+                </div>
+   			</fieldset>
+        </form>
+    </div>
+{% endblock %}

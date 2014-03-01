@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<title>Websnort</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+	<style>
+		{% include "css/bootstrap.min.css" %}
+		{% include "css/bootstrap-responsive.min.css" %}
+
+        body {
+          padding-top: 60px;
+          padding-bottom: 40px;
+        }
+
+
+	</style>
+
+	</head>
+	<body>
+    	<div class="navbar navbar-inverse navbar-fixed-top">
+        	<div class="navbar-inner">
+            	<div class="container">
+                	<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                	<span class="icon-bar" />
+                	<span class="icon-bar" />
+                	<span class="icon-bar" />
+                	</a>
+                	<a class="brand" href="/">Websnort</a>
+                	<div class="nav-collapse">
+                    	<ul class="nav">
+                        	<li><a href="/">Submit</a></li>
+                        	<li><a href="/api">API Info</a></li>
+                    	</ul>
+                	</div>
+            	</div>
+        	</div>
+    	</div>
+    	<div class="container">
+        {% block content %}{% endblock %}
+
+        	<footer class="footer">
+            	<p class="pull-right"><a href="#">Back to top</a></p>
+	        </footer>
+    	</div>
+    <script>
+    {% include "js/jquery.js" %}
+    {% include "js/bootstrap.min.js" %}
+    {% include "js/bootstrap-filestyle.min.js" %}
+    </script>
+	</body>
+</html>
