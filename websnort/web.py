@@ -25,7 +25,7 @@ import logging
 import os
 import tempfile
 
-from bottle import request, route, run
+from bottle import request, response, route, run
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 
@@ -88,6 +88,7 @@ def api_submit():
     """Blocking POST handler for file submission.
     Runs snort on supplied file and returns results."""
     data = request.files.file
+    response.content_type = 'application/json'
     if not data or not hasattr(data, 'file'):
         return json.dumps({"status": "Failed", "stderr": "Missing form params"})
     return json.dumps(run_snort(data.file, data.filename), default=jsondate)
