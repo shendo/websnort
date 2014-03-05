@@ -2,5 +2,72 @@
 {% block content %}
     <div class="page-header">
         <h3>API Documentation</h3>
+        <p>
+        The websnort API is currently implemented as a blocking synchronous HTTP POST.
+        If you have a large ruleset defined for your instance or many concurrent requests
+        timeout issues could be a problem.  An asynchronous job submission API is possible
+        if there is enough interest.
+        </p>
+        <div class="overview">
+        <table class="table table-striped table-bordered">
+        	<thead>
+        		<tr>
+        			<th>URL</th>
+        			<th>Method</th>
+        			<th style="width: 25%;">Description</th>
+        			<th>Successful Response</th>
+        			<th>Unsuccessful Response</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		<tr>
+        			<td>/api/submit</td>
+        			<td>POST</td>
+        			<td>Accepts a multipart/form-data submission containing the pcap 
+        				file to scan and returns a results json dictionary.        				
+        			</td>
+        			<td>
+        				{"status": "Success",<br/> 
+        				 "filename": "filename"<br/>
+        				 "filesize": bytes,<br/>
+        				 "md5": "hexstring", <br/> 
+        				 "start": "YYYY-MM-DDTHH:mm:SS.sssssss",<br/> 
+        				 "duration": seconds,<br/>
+        				 "alerts": [<br/>
+        				 {"source": "ipaddress", <br/>
+        				 "destination": "ipaddress", <br/>
+        				 "protocol": "protocol name",<br/>
+        				 "classtype": "alert classificaiton", <br/>
+        				 "sid": signature_id, <br/>
+        				 "timestamp": "YYYY-MM-DDTHH:mm:SS.sssssss", <br/>
+        				 "message": "alert description", <br/>
+        				 "revision": signature_revision},<br/>
+        				 ]}<br/>
+        			</td>
+        			<td>
+        				{"status": "Failed",<br/> 
+        				 "filename": "filename"<br/>
+        				 "filesize": bytes,<br/>
+        				 "md5": "hexstring", <br/> 
+        				 "start": "YYYY-MM-DDTHH:mm:SS.sssssss",<br/> 
+        				 "duration": seconds,<br/>
+        				 "stderr": "Error description / snort output" <br/>
+        				 "alerts": [}}<br/>
+        			</td>
+        		</tr>
+        	</tbody>
+        </table> 
+        </div>
+        <h3>Example</h3>
+        <pre>
+$ curl --form file=@test.pcap http://localhost:8080/api/submit
+HTTP/1.0 200 OK
+Date: Wed, 05 Mar 2014 10:16:03 GMT
+Server: WSGIServer/0.1 Python/2.7.3
+Content-Length: 730
+Content-Type: application/json
+
+{"status": "Success",  "filename": "test.pcap", "start": "2014-03-05T21:04:10.141000", "duration": 25.882, "md5": "e682a609cfba34a6a89c12ac883b9a35", "filesize": 1512125, "alerts": [{"source": "23.11.5.107", "classtype": "Misc activity", "protocol": "ICMP", "sid": 402, "timestamp": "2014-02-12T22:22:21.078698", "message": "PROTOCOL-ICMP Destination Unreachable Port Unreachable", "destination": "10.1.1.132", "revision": 11}, {"source": "10.1.1.1:53", "classtype": "Attempted Administrator Privilege Gain", "protocol": "UDP", "sid": 20242, "timestamp": "2014-02-12T22:22:24.952086", "message": "PROTOCOL-DNS Oracle Secure Backup observice.exe dns response overflow attempt", "destination": "10.1.1.132:65340", "revision": 6}]}
+        </pre>        
     </div>
 {% endblock %}
