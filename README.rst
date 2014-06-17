@@ -22,7 +22,7 @@ Install ``snort`` if needed: ::
 
     sudo apt-get install snort
     
-_Optional_ Disable running snort service if only required for this web api: ::
+*Optional* Disable running snort service if only required for this web api: ::
 
     sudo service snort stop
     sudo update.rc disable snort
