@@ -1,0 +1,5 @@
+include README.rst
+include LICENSE
+include requirements.txt
+recursive-include websnort/conf *
+recursive-include websnort/data *
