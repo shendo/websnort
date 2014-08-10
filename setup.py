@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# Websnort - Web submission API for analysing pcap files with snort
-# Copyright (C) 2013 Steve Henderson
+# Websnort - Web service for analysing pcap files with snort
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ setup(
     author="Steve Henderson",
     author_email="steve.henderson@hendotech.com.au",
     url="https://github.com/shendo/websnort",
-    description="Web submission API for analysing pcap files with snort",
+    description="Web service for analysing pcap files with snort",
     long_description=open('README.rst').read(),
     entry_points={"console_scripts": ['websnort = websnort.web:main']
           },

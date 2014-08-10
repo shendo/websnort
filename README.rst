@@ -1,7 +1,9 @@
 websnort
 ========
 
-Web submission api for analysing pcap files with ``snort``.
+Web service for analysing pcap files with ``snort``.
+
+|build_status| |pypi_version|
 
 Overview
 --------
@@ -45,3 +47,12 @@ requests can be made using GitHub's `issues system`_.
 
 .. _GitHub: https://github.com/shendo/websnort
 .. _issues system: https://github.com/shendo/websnort/issues
+
+.. |build_status| image:: https://secure.travis-ci.org/shendo/websnort.png?branch=master
+   :target: https://travis-ci.org/shendo/websnort
+   :alt: Current build status
+
+.. |pypi_version| image:: https://pypip.in/v/websnort/badge.png
+   :target: https://pypi.python.org/pypi/websnort
+   :alt: Latest PyPI version
+

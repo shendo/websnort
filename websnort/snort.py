@@ -1,5 +1,5 @@
-# Websnort - Web submission API for analysing pcap files with snort
-# Copyright (C) 2013 Steve Henderson
+# Websnort - Web service for analysing pcap files with snort
+# Copyright (C) 2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
