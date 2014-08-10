@@ -11,7 +11,7 @@ capture files to run against a ``snort`` IDS instance.  Alerts and logs are
 returned as results.
 
 If you are after a web interface for monitoring a running ``snort`` instance,
-see http://www.snort.org/snort-downloads/additional-downloads instead.
+see https://www.snort.org/downloads#additional-downloads instead.
 
 Getting Started
 ---------------

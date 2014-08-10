@@ -38,8 +38,9 @@ setup(
     include_package_data=True,
     license="GPL",
     install_requires = ['bottle>=0.10', 'jinja2>=2.5'],
+    tests_requires = ['pytest>=2.5'],
     classifiers = [
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
