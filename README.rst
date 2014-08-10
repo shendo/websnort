@@ -27,7 +27,7 @@ Install ``snort`` if needed: ::
 *Optional* Disable running snort service if only required for this web api: ::
 
     sudo service snort stop
-    sudo update.rc disable snort
+    sudo update-rc.d snort disable
     
 Install using ``pip``: ::
 
