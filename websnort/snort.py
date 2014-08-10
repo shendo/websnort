@@ -70,7 +70,7 @@ def run(pcap, snortbin=None, conf=None):
         if not is_pcap(pcap):
             raise Exception("Not a valid pcap file")
   
-        proc = Popen(snort_cmd(pcap), stdout=PIPE, stderr=PIPE, shell=True, universal_newlines=True)
+        proc = Popen(snort_cmd(pcap), stdout=PIPE, stderr=PIPE, universal_newlines=True)
         stdout, stderr = proc.communicate() 
         if proc.returncode != 0:
             stderr = "\n".join(["Execution failed return code: {0}".format(proc.returncode),
