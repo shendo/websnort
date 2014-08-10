@@ -28,8 +28,14 @@ Install ``snort`` if needed: ::
 
     sudo service snort stop
     sudo update-rc.d snort disable
-    
-Install using ``pip``: ::
+
+On recent ubuntu/debian releases the default *snort.conf* is not world readable.  Unless 
+planning to run the web service as root (not recommended) you will need to modify the
+permissions, for example: ::
+
+	sudo chmod a+r /etc/snort/snort.conf
+
+Install web service using ``pip``: ::
 
 	sudo pip install websnort
 
