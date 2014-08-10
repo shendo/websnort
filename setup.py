@@ -38,7 +38,7 @@ setup(
     include_package_data=True,
     license="GPL",
     install_requires = ['bottle>=0.10', 'jinja2>=2.5'],
-    tests_requires = ['pytest>=2.5'],
+    tests_require = ['pytest>=2.5'],
     classifiers = [
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
