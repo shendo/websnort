@@ -1,5 +1,5 @@
 # Websnort - Web service for analysing pcap files with snort
-# Copyright (C) 2014 Steve Henderson
+# Copyright (C) 2013-2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
-from websnort import snort
+from websnort.ids import snort
 
 def test_parse_alert():
     count = 0
@@ -30,7 +30,21 @@ def test_parse_alert():
         assert x['destination'] == "239.255.255.250:1900"
         count += 1
     assert count == 1
-       
-       
+
+def test_parse_version():
+    output = """
+   ,,_     -*> Snort! <*-
+  o"  )~   Version 2.9.6.0 GRE (Build 47) 
+   ''''    By Martin Roesch & The Snort Team: http://www.snort.org/snort/snort-team
+           Copyright (C) 2014 Cisco and/or its affiliates. All rights reserved.
+           Copyright (C) 1998-2013 Sourcefire, Inc., et al.
+           Using libpcap version 1.5.3
+           Using PCRE version: 8.31 2012-07-06
+           Using ZLIB version: 1.2.8
+    """
+    assert snort.parse_version(output) == "2.9.6.0 GRE (Build 47)"
+
 if __name__ == '__main__':
-    test_parse_alert() 
+    test_parse_alert()
+    test_parse_version()
+

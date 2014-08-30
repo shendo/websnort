@@ -1,4 +1,4 @@
-# Websnort - Web submission API for analysing pcap files with snort
+# Websnort - Web service for analysing pcap files with snort
 # Copyright (C) 2013-2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -14,18 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-[websnort]
-# List of config instances to run
-ids = snort
+import pkg_resources
 
-[snort]
-# python ids module to use
-module = snort
-# name to give the ruleset in results
-ruleset = community
-# path to snort binary, will search path if not absolute
-path = snort
-# snort rules config file location
-config = /etc/snort/snort.conf
-# any additional command line args to include
-extra_args =
+# Mapping of known IDS module name -> Runner class
+registry = {}
+for modules in pkg_resources.iter_entry_points(group='websnort.ids'):
+    registry[modules.name] = modules.load()

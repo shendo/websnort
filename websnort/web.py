@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Websnort - Web service for analysing pcap files with snort
-# Copyright (C) 2014 Steve Henderson
+# Copyright (C) 2013-2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,8 @@ from bottle import request, response, route, run
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 
-from websnort import snort
+from websnort import runner
+from websnort.version import __version__
 
 # Load templates
 root = os.path.join(os.path.dirname(__file__), "html")
@@ -44,15 +45,16 @@ def home():
     template = env.get_template("submit.html")
     return template.render()
 
-def run_snort(infile, filename):
-    """Run snort across the supplied file.
+def analyse_pcap(infile, filename):
+    """Run IDS across the supplied file.
     @param infile: File like object containing pcap data.
-    @return: SnortRun object with results.
+    @return: Dictionary with results.
     """
     tmp = tempfile.NamedTemporaryFile(suffix=".pcap", delete=False)
     m = hashlib.md5()
     results = {'filename': filename,
                'status': 'Failed',
+               'apiversion': __version__,
                }
     try:
         size = 0        
@@ -65,7 +67,7 @@ def run_snort(infile, filename):
         tmp.close()
         results['md5'] = hexlify(m.digest())
         results['filesize'] = size
-        results.update(snort.run(tmp.name))
+        results.update(runner.run(tmp.name))
     except OSError, ex:
         results['stderr'] = str(ex)
     finally:
@@ -80,8 +82,7 @@ def submit_and_render():
     template = env.get_template("results.html")
     if not data:
         pass
-    
-    return template.render(run_snort(data.file, data.filename))
+    return template.render(analyse_pcap(data.file, data.filename))
 
 @route("/api/submit", method="POST")
 def api_submit():
@@ -91,7 +92,7 @@ def api_submit():
     response.content_type = 'application/json'
     if not data or not hasattr(data, 'file'):
         return json.dumps({"status": "Failed", "stderr": "Missing form params"})
-    return json.dumps(run_snort(data.file, data.filename), default=jsondate)
+    return json.dumps(analyse_pcap(data.file, data.filename), default=jsondate, indent=4)
     
 @route("/api")
 def api():

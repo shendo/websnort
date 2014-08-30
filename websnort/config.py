@@ -1,5 +1,5 @@
 # Websnort - Web service for analysing pcap files with snort
-# Copyright (C) 2014 Steve Henderson
+# Copyright (C) 2013-2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,6 +18,10 @@ from ConfigParser import ConfigParser
 import os
 from pkg_resources import DistributionNotFound, Requirement, ResourceManager
 
+# user home path
+USER_PATH = os.path.expanduser("~/.websnort")
+# system path
+SYSTEM_PATH = "/etc/websnort"
 # path to conf files if package not installed
 SOURCE_PATH = os.path.join(os.path.dirname(__file__), 'conf')
 
@@ -28,15 +32,23 @@ def installed_location(filename):
         return ResourceManager().resource_filename(Requirement.parse("websnort"), filename)
     except DistributionNotFound:
         return None
-    
+
 class Config:
     """Main config file parser for websnort.
     """
     def __init__(self, cfg='websnort.conf'):
         installed_path = installed_location(cfg) or 'notfound'
         parser = ConfigParser()
-        parser.read([installed_path, os.path.join(SOURCE_PATH, cfg)])
-        
-        self.path = parser.get('snort', 'path')
-        self.rules = parser.get('snort', 'config')
-        
+        parser.read([os.path.join(SOURCE_PATH, cfg),
+                     installed_path,
+                     os.path.join(SYSTEM_PATH, cfg),
+                     os.path.join(USER_PATH, cfg),
+                     cfg])
+
+        self.modules = {}
+        for x in parser.get('websnort', 'ids').split(','):
+            x = x.strip()
+            options = {}
+            for y in parser.options(x):
+                options[y] = parser.get(x, y)
+            self.modules[x] = options

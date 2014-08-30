@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Websnort - Web service for analysing pcap files with snort
-# Copyright (C) 2014 Steve Henderson
+# Copyright (C) 2013-2014 Steve Henderson
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,18 +26,19 @@ def load_version():
 setup(
     name="websnort",
     version=load_version(),
-    packages=['websnort'],
+    packages=['websnort', 'websnort.ids'],
     zip_safe=False,
     author="Steve Henderson",
     author_email="steve.henderson@hendotech.com.au",
     url="https://github.com/shendo/websnort",
     description="Web service for analysing pcap files with snort",
     long_description=open('README.rst').read(),
-    entry_points={"console_scripts": ['websnort = websnort.web:main']
+    entry_points={"console_scripts": ['websnort = websnort.web:main'],
+                  "websnort.ids": ['snort = websnort.ids.snort:Snort',]
           },
     include_package_data=True,
     license="GPL",
-    install_requires = ['bottle>=0.10', 'jinja2>=2.5'],
+    install_requires = open('requirements.txt').readlines(),
     tests_require = ['pytest>=2.5'],
     classifiers = [
         'Development Status :: 4 - Beta',

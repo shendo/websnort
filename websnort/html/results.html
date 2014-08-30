@@ -28,9 +28,30 @@
 			</tbody>
 		</table>        	
         </div>
-		{% if not status == "Success" %}
-		<div class="alert alert-danger">{{stderr}}</div>
-		{% endif %}
+		{% for error in errors %}
+		<div class="alert alert-danger">{{error}}</div>
+		{% endfor %}
+		{% for analysis in analyses %}
+		<div class="analysis">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>IDS</th>
+                    <th>Version</th>
+                    <th>Ruleset</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{analysis.name}}</td>
+                    <td>{{analysis.version}}</td>
+                    <td>{{analysis.ruleset}}</td>
+                    <td>{{analysis.duration}}</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
         <div class="alerts">
         <table class="table table-striped table-bordered">
             <thead>
@@ -45,7 +66,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for row in alerts | sort(attribute='timestamp')%}
+            {% for row in analysis.alerts | sort(attribute='timestamp')%}
                 <tr>
                     <td>{{row.timestamp}}</td>
                     <td>{{row.sid}}</td>
@@ -61,5 +82,8 @@
             </tbody>
         </table>
         </div>
+        {% else %}
+        No analysis of PCAP performed
+        {% endfor %}
     </div>
 {% endblock %}
