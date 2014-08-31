@@ -48,7 +48,7 @@ class Config:
         self.modules = {}
         for x in parser.get('websnort', 'ids').split(','):
             x = x.strip()
-            options = {}
+            options = {'name': x}
             for y in parser.options(x):
                 options[y] = parser.get(x, y)
             self.modules[x] = options

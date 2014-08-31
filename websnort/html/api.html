@@ -4,7 +4,7 @@
         <h3>API Documentation</h3>
         <p>
         The websnort API is currently implemented as a blocking synchronous HTTP POST.
-        If you have a large ruleset defined for your instance or many concurrent requests
+        If you have a large ruleset defined for your instance or many concurrent requests,
         timeout issues could be a problem.  An asynchronous job submission API is possible
         if there is enough interest.
         </p>
@@ -27,13 +27,21 @@
         				file to scan and returns a results json dictionary.        				
         			</td>
         			<td>
-        				{"status": "Success",<br/> 
+        				{"apiversion": "version",<br/>
+        				 "status": "Success",<br/> 
         				 "filename": "filename"<br/>
         				 "filesize": bytes,<br/>
         				 "md5": "hexstring", <br/> 
         				 "start": "YYYY-MM-DDTHH:mm:SS.sssssss",<br/> 
         				 "duration": seconds,<br/>
-        				 "alerts": [<br/>
+        				 "analyses": [<br/>
+        				 {"status": "Success",<br/>
+        				 "name": "configname",<br/>
+        				 "module": "idsname",<br/>
+        				 "version": "idsversion",<br/>
+        				 "ruleset": "label",<br/>
+        				 "duration": seconds,<br/>
+        				 "alerts":[<br/>
         				 {"source": "ipaddress", <br/>
         				 "destination": "ipaddress", <br/>
         				 "protocol": "protocol name",<br/>
@@ -42,17 +50,19 @@
         				 "timestamp": "YYYY-MM-DDTHH:mm:SS.sssssss", <br/>
         				 "message": "alert description", <br/>
         				 "revision": signature_revision},<br/>
-        				 ]}<br/>
+        				 ]}
+        				 }<br/>
         			</td>
         			<td>
-        				{"status": "Failed",<br/> 
+        				{"apiversion": "version",<br/>
+        				 "status": "Failed",<br/> 
         				 "filename": "filename"<br/>
         				 "filesize": bytes,<br/>
         				 "md5": "hexstring", <br/> 
         				 "start": "YYYY-MM-DDTHH:mm:SS.sssssss",<br/> 
         				 "duration": seconds,<br/>
-        				 "stderr": "Error description / snort output" <br/>
-        				 "alerts": []}<br/>
+        				 "errors": []"Error description / details"] <br/>
+        				 "analyses": []}<br/>
         			</td>
         		</tr>
         	</tbody>
@@ -60,14 +70,44 @@
         </div>
         <h3>Example</h3>
         <pre>
-$ curl --form file=@test.pcap http://localhost:8080/api/submit
+$ curl -i --form file=@test.pcap http://localhost:8080/api/submit
 HTTP/1.0 200 OK
-Date: Wed, 05 Mar 2014 10:16:03 GMT
-Server: WSGIServer/0.1 Python/2.7.3
-Content-Length: 730
+Date: Sun, 31 Aug 2014 02:52:50 GMT
+Server: WSGIServer/0.1 Python/2.7.6
+Content-Length: 1001
 Content-Type: application/json
 
-{"status": "Success",  "filename": "test.pcap", "start": "2014-03-05T21:04:10.141000", "duration": 25.882, "md5": "e682a609cfba34a6a89c12ac883b9a35", "filesize": 1512125, "alerts": [{"source": "23.11.5.107", "classtype": "Misc activity", "protocol": "ICMP", "sid": 402, "timestamp": "2014-02-12T22:22:21.078698", "message": "PROTOCOL-ICMP Destination Unreachable Port Unreachable", "destination": "10.1.1.132", "revision": 11}, {"source": "10.1.1.1:53", "classtype": "Attempted Administrator Privilege Gain", "protocol": "UDP", "sid": 20242, "timestamp": "2014-02-12T22:22:24.952086", "message": "PROTOCOL-DNS Oracle Secure Backup observice.exe dns response overflow attempt", "destination": "10.1.1.132:65340", "revision": 6}]}
-        </pre>        
+{
+    "status": "Success", 
+    "errors": [], 
+    "apiversion": "0.4", 
+    "filename": "test.pcap", 
+    "start": "2014-08-31T12:52:48.828358", 
+    "filesize": 12373, 
+    "duration": 2.134792, 
+    "analyses": [
+        {
+            "status": "Success", 
+            "name": "snort", 
+            "alerts": [
+                {
+                    "source": "10.1.1.132:58650", 
+                    "classtype": "Detection of a Network Scan", 
+                    "protocol": "UDP", 
+                    "sid": 1917, 
+                    "timestamp": "2014-01-28T21:26:04.885446", 
+                    "message": "SCAN UPnP service discover attempt", 
+                    "destination": "239.255.255.250:1900", 
+                    "revision": 6
+                }
+            ], 
+            "module": "snort", 
+            "version": "2.9.6.0 GRE (Build 47)", 
+            "ruleset": "community", 
+            "duration": 2.131043
+        }
+    ], 
+    "md5": "22bd2cfbdea14676ef4211e539cbb535"
+}        </pre>
     </div>
 {% endblock %}

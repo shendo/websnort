@@ -15,12 +15,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import datetime
+from multiprocessing.pool import ThreadPool
 
 from websnort.plugins import registry
 from websnort.config import Config
 
 STATUS_SUCCESS = "Success"
 STATUS_FAILED = "Failed"
+MAX_THREADS = 3
 
 def is_pcap(pcap):
     """Simple test for pcap magic bytes in supplied file.
@@ -35,13 +37,12 @@ def is_pcap(pcap):
             return True
         return False
 
-def _run_ids(name, runner, pcap):
+def _run_ids(runner, pcap):
     """Runs the specified IDS runner.
-    @param name: Name/label of ids config
     @param runner: Runner instance to use
     @param pcap: File path to pcap for analysis
     """
-    run = {'name': name,
+    run = {'name': runner.conf.get('name'),
            'module': runner.conf.get('module'),
            'ruleset': runner.conf.get('ruleset', 'default'),
            'status': STATUS_FAILED,
@@ -66,20 +67,27 @@ def run(pcap):
     errors = []
     status = STATUS_FAILED
     analyses = []
+    pool = ThreadPool(MAX_THREADS)
     try:
         if not is_pcap(pcap):
             raise Exception("Not a valid pcap file")
 
-        for name, conf in Config().modules.items():
-            runner = registry.get(conf['module'])(conf)
-            run = _run_ids(name, runner, pcap)
-            analyses.append(run)
+        runners = []
+        for conf in Config().modules.values():
+            runner = registry.get(conf['module'])
+            if not runner:
+                raise Exception("No module named: '{0}' found registered"
+                                .format(conf['module']))
+            runners.append(runner(conf))
+        # launch via worker pool
+        analyses = [ pool.apply_async(_run_ids, (runner, pcap)) for runner in runners ]
+        analyses = [ x.get() for x in analyses ]
         # were all runs successful?
         if all([ x['status'] == STATUS_SUCCESS for x in analyses ]):
             status = STATUS_SUCCESS
         # propagate any errors to the main list
         for run in [ x for x in analyses if x['status'] != STATUS_SUCCESS ]:
-            errors.append("Failed to run {0}: {1}".format(x['name'], x['stderr']))
+            errors.append("Failed to run {0}: {1}".format(run['name'], run['error']))
     except Exception, ex:
         errors.append(str(ex))
         

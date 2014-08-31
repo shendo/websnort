@@ -34,7 +34,8 @@ setup(
     description="Web service for analysing pcap files with snort",
     long_description=open('README.rst').read(),
     entry_points={"console_scripts": ['websnort = websnort.web:main'],
-                  "websnort.ids": ['snort = websnort.ids.snort:Snort',]
+                  "websnort.ids": ['snort = websnort.ids.snort:Snort',
+                                   'suricata = websnort.ids.suricata:Suricata']
           },
     include_package_data=True,
     license="GPL",
