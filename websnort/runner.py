@@ -1,6 +1,6 @@
 # Websnort - Web service for analysing pcap files with snort
 # Copyright (C) 2013-2014 Steve Henderson
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -23,6 +23,19 @@ from websnort.config import Config
 STATUS_SUCCESS = "Success"
 STATUS_FAILED = "Failed"
 MAX_THREADS = 3
+
+def duration(start, end=None):
+    """Returns duration in seconds since supplied time.
+    @param start: datetime object
+    @paaram end: Optional end datetime, None = now
+    @return: Seconds as decimal since start
+    """
+    # time_delta.total_seconds() only available in 2.7+
+    if not end:
+        end = datetime.now()
+    td = end - start
+    return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 1000000) \
+        / 1000000.0
 
 def is_pcap(pcap):
     """Simple test for pcap magic bytes in supplied file.
@@ -51,18 +64,19 @@ def _run_ids(runner, pcap):
         run_start = datetime.now()
         version, alerts = runner.run(pcap)
         run['version'] = version or 'Unknown'
-        run['duration'] = (datetime.now() - run_start).total_seconds()
         run['status'] = STATUS_SUCCESS
         run['alerts'] = alerts
     except Exception, ex:
         run['error'] = str(ex)
+    finally:
+        run['duration'] = duration(run_start)
     return run
-        
+
 def run(pcap):
     """Runs configured ids instances against the supplied pcap.
     @param pcap: File path to pcap file to analyse
     @return: Dict with details and results of run/s
-    """ 
+    """
     start = datetime.now()
     errors = []
     status = STATUS_FAILED
@@ -90,9 +104,9 @@ def run(pcap):
             errors.append("Failed to run {0}: {1}".format(run['name'], run['error']))
     except Exception, ex:
         errors.append(str(ex))
-        
+
     return {'start': start,
-            'duration': (datetime.now() - start).total_seconds(),
+            'duration': duration(start),
             'status': status,
             'analyses': analyses,
             'errors': errors,
@@ -100,7 +114,9 @@ def run(pcap):
 
 class IDSRunner(object):
     """Interface of IDS Runners."""
-    
+
+    conf = {}
+
     def run(self, pcap):
         """Run the IDS over the supplied pcap.
         @param pcap: File path to PCAP for anlaysis.
