@@ -1,6 +1,6 @@
 # Websnort - Web service for analysing pcap files with snort
 # Copyright (C) 2013-2014 Steve Henderson
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -32,7 +32,7 @@ VERSION_PATTERN = re.compile(
 )
 
 class Snort(object):
-    
+
     def __init__(self, conf):
         self.conf = conf
 
@@ -42,28 +42,28 @@ class Snort(object):
         @return: list of snort command args to scan supplied pcap file
         """
         cmdline = "'{0}' -A console -N -y -c '{1}' {2} -r '{3}'" \
-            .format(self.conf['path'], self.conf['config'], 
+            .format(self.conf['path'], self.conf['config'],
                     self.conf['extra_args'] or '', pcap)
         # can't seem to capture stderr from snort on windows
         # unless launched via cmd shell
         if 'nt' in os.name:
-            cmdline = "cmd.exe /c " + cmdline 
+            cmdline = "cmd.exe /c " + cmdline
         return shlex.split(cmdline)
 
     def run(self, pcap):
         """Runs snort against the supplied pcap.
         @return: Dict with details/results of run
         """
-        proc = Popen(self._snort_cmd(pcap), stdout=PIPE, 
+        proc = Popen(self._snort_cmd(pcap), stdout=PIPE,
                      stderr=PIPE, universal_newlines=True)
-        stdout, stderr = proc.communicate() 
+        stdout, stderr = proc.communicate()
         if proc.returncode != 0:
             raise Exception("\n".join(["Execution failed return code: {0}" \
                                 .format(proc.returncode), stderr or ""]))
 
         return (parse_version(stderr),
                 [ x for x in parse_alert(stdout) ])
-        
+
 def parse_version(output):
     """Parses the supplied output and returns the version string.
     @param output: A string containing the output of running snort.
@@ -87,7 +87,7 @@ def parse_alert(output):
     for x in output.splitlines():
         match = ALERT_PATTERN.match(x)
         if match:
-            yield {'timestamp': datetime.strptime(match.group('timestamp'), 
+            yield {'timestamp': datetime.strptime(match.group('timestamp'),
                                                   '%m/%d/%y-%H:%M:%S.%f'),
                    'sid': int(match.group('sid')),
                    'revision': int(match.group('revision')),

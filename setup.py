@@ -2,7 +2,7 @@
 
 # Websnort - Web service for analysing pcap files with snort
 # Copyright (C) 2013-2014 Steve Henderson
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -39,9 +39,9 @@ setup(
           },
     include_package_data=True,
     license="GPL",
-    install_requires = open('requirements.txt').readlines(),
-    tests_require = ['pytest>=2.5'],
-    classifiers = [
+    install_requires=open('requirements.txt').readlines(),
+    tests_require=['pytest>=2.5'],
+    classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',

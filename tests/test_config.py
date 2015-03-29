@@ -1,6 +1,6 @@
 # Websnort - Web service for analysing pcap files with snort
 # Copyright (C) 2013-2014 Steve Henderson
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -19,7 +19,7 @@ from websnort.config import Config
 def test_config():
     conf = Config('websnort.conf.complex')
     assert len(conf.modules) == 3
-    
+
     assert conf.modules.get('snort_community')
     assert conf.modules.get('snort_vrt')
     assert conf.modules.get('suricata_et')
