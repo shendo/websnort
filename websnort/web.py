@@ -2,7 +2,7 @@
 
 # Websnort - Web service for analysing pcap files with snort
 # Copyright (C) 2013-2014 Steve Henderson
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -15,6 +15,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+try:
+    from gevent import monkey
+    monkey.patch_all()
+    SERVER = 'gevent'
+except ImportError:
+    SERVER = 'wsgiref'
 
 import argparse
 from binascii import hexlify
@@ -38,7 +45,7 @@ env = Environment()
 env.loader = FileSystemLoader(root)
 
 jsondate = lambda obj: obj.isoformat() if isinstance(obj, datetime) else None
-    
+
 @route("/")
 def home():
     """Main page, displays a submit file form"""
@@ -57,7 +64,7 @@ def analyse_pcap(infile, filename):
                'apiversion': __version__,
                }
     try:
-        size = 0        
+        size = 0
         while True:
             buf = infile.read(16384)
             if not buf: break
@@ -93,7 +100,7 @@ def api_submit():
     if not data or not hasattr(data, 'file'):
         return json.dumps({"status": "Failed", "stderr": "Missing form params"})
     return json.dumps(analyse_pcap(data.file, data.filename), default=jsondate, indent=4)
-    
+
 @route("/api")
 def api():
     template = env.get_template("api.html")
@@ -102,15 +109,15 @@ def api():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-H", "--host", help="Web server Host address to bind to", 
+    parser.add_argument("-H", "--host", help="Web server Host address to bind to",
                         default="0.0.0.0", action="store", required=False)
-    parser.add_argument("-p", "--port", help="Web server Port to bind to", 
+    parser.add_argument("-p", "--port", help="Web server Port to bind to",
                         default=8080, action="store", required=False)
     args = parser.parse_args()
-    
+
     logging.basicConfig()
-    run(host=args.host, port=args.port, reloader=True)
+    run(host=args.host, port=args.port, reloader=True, server=SERVER)
 
 if __name__ == '__main__':
     main()
-    
+
