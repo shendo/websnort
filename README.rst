@@ -13,7 +13,7 @@ Overview
 capture files to run against IDS instances.  Alerts and details from the analysis
 are returned as results.
 
-If you are after a web interface for monitoring a running ``snort`` instance,
+If you are after a web interface for monitoring a live ``snort`` instance,
 see https://www.snort.org/downloads#additional-downloads instead.
 
 While originally developed specifically for ``snort``.  Recent releases support
