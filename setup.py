@@ -41,6 +41,7 @@ setup(
     license="GPL",
     install_requires=open('requirements.txt').readlines(),
     tests_require=['pytest>=2.5'],
+    setup_requires=['pytest-runner'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
