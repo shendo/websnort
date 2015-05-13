@@ -32,7 +32,7 @@ import logging
 import os
 import tempfile
 
-from bottle import request, response, route, run
+from bottle import request, response, route, run, default_app
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 
@@ -46,11 +46,11 @@ env.loader = FileSystemLoader(root)
 
 jsondate = lambda obj: obj.isoformat() if isinstance(obj, datetime) else None
 
-@route("/")
+@route("/", name="home")
 def home():
     """Main page, displays a submit file form"""
     template = env.get_template("submit.html")
-    return template.render()
+    return template.render(base)
 
 def analyse_pcap(infile, filename):
     """Run IDS across the supplied file.
@@ -81,7 +81,7 @@ def analyse_pcap(infile, filename):
         os.remove(tmp.name)
     return results
 
-@route("/submit", method="POST")
+@route("/submit", method="POST", name="submit")
 def submit_and_render():
     """Blocking POST handler for file submission.
     Runs snort on supplied file and returns results."""
@@ -89,9 +89,11 @@ def submit_and_render():
     template = env.get_template("results.html")
     if not data:
         pass
-    return template.render(analyse_pcap(data.file, data.filename))
+    results = analyse_pcap(data.file, data.filename)
+    results.update(base)
+    return template.render(results)
 
-@route("/api/submit", method="POST")
+@route("/api/submit", method="POST", name="api_submit")
 def api_submit():
     """Blocking POST handler for file submission.
     Runs snort on supplied file and returns results."""
@@ -101,10 +103,10 @@ def api_submit():
         return json.dumps({"status": "Failed", "stderr": "Missing form params"})
     return json.dumps(analyse_pcap(data.file, data.filename), default=jsondate, indent=4)
 
-@route("/api")
+@route("/api", name="api")
 def api():
     template = env.get_template("api.html")
-    return template.render()
+    return template.render(base)
 
 
 def main():
@@ -117,6 +119,10 @@ def main():
 
     logging.basicConfig()
     run(host=args.host, port=args.port, reloader=True, server=SERVER)
+
+# WSGI and template url support
+application = default_app()
+base = {'get_url': application.get_url}
 
 if __name__ == '__main__':
     main()
