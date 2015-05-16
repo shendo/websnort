@@ -16,8 +16,12 @@
 
 import pkg_resources
 
+from websnort.ids import snort, suricata
 # Mapping of known IDS module name -> Runner class
-registry = {}
+registry = {
+    'snort': snort.Snort,
+    'suricata': suricata.Suricata
+}
 
 for modules in pkg_resources.iter_entry_points(group='websnort.ids'):
     registry[modules.name] = modules.load()
