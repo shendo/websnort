@@ -48,14 +48,19 @@ jsondate = lambda obj: obj.isoformat() if isinstance(obj, datetime) else None
 
 @route("/", name="home")
 def home():
-    """Main page, displays a submit file form"""
+    """
+    Main page, displays a submit file form.
+    """
     template = env.get_template("submit.html")
     return template.render(base)
 
 def analyse_pcap(infile, filename):
-    """Run IDS across the supplied file.
-    @param infile: File like object containing pcap data.
-    @return: Dictionary with results.
+    """
+    Run IDS across the supplied file.
+
+    :param infile: File like object containing pcap data.
+    :param filename: Filename of the submitted file.
+    :returns: Dictionary of analysis results.
     """
     tmp = tempfile.NamedTemporaryFile(suffix=".pcap", delete=False)
     m = hashlib.md5()
@@ -83,8 +88,10 @@ def analyse_pcap(infile, filename):
 
 @route("/submit", method="POST", name="submit")
 def submit_and_render():
-    """Blocking POST handler for file submission.
-    Runs snort on supplied file and returns results."""
+    """
+    Blocking POST handler for file submission.
+    Runs snort on supplied file and returns results as rendered html.
+    """
     data = request.files.file
     template = env.get_template("results.html")
     if not data:
@@ -95,8 +102,10 @@ def submit_and_render():
 
 @route("/api/submit", method="POST", name="api_submit")
 def api_submit():
-    """Blocking POST handler for file submission.
-    Runs snort on supplied file and returns results."""
+    """
+    Blocking POST handler for file submission.
+    Runs snort on supplied file and returns results as json text.
+    """
     data = request.files.file
     response.content_type = 'application/json'
     if not data or not hasattr(data, 'file'):
@@ -105,11 +114,17 @@ def api_submit():
 
 @route("/api", name="api")
 def api():
+    """
+    Display an api usage/help page.
+    """
     template = env.get_template("api.html")
     return template.render(base)
 
 
 def main():
+    """
+    Main entrypoint for command-line webserver.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("-H", "--host", help="Web server Host address to bind to",
                         default="0.0.0.0", action="store", required=False)

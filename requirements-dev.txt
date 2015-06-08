@@ -1,0 +1,4 @@
+bottle>=0.10
+jinja2>=2.5
+pytest>=2.5
+sphinx>=1.3

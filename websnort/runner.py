@@ -25,12 +25,14 @@ STATUS_FAILED = "Failed"
 MAX_THREADS = 3
 
 def duration(start, end=None):
-    """Returns duration in seconds since supplied time.
-    @param start: datetime object
-    @paaram end: Optional end datetime, None = now
-    @return: Seconds as decimal since start
     """
-    # time_delta.total_seconds() only available in 2.7+
+    Returns duration in seconds since supplied time.
+    Note: time_delta.total_seconds() only available in python 2.7+
+
+    :param start: datetime object
+    :param end: Optional end datetime, None = now
+    :returns: Seconds as decimal since start
+    """
     if not end:
         end = datetime.now()
     td = end - start
@@ -38,9 +40,11 @@ def duration(start, end=None):
         / 1000000.0
 
 def is_pcap(pcap):
-    """Simple test for pcap magic bytes in supplied file.
-    @param pcap: Pcap filename to check
-    @return: True if content is pcap (magic bytes present), otherwise False.
+    """
+    Simple test for pcap magic bytes in supplied file.
+
+    :param pcap: File path to Pcap file to check
+    :returns: True if content is pcap (magic bytes present), otherwise False.
     """
     with open(pcap, 'rb') as tmp:
         header = tmp.read(4)
@@ -51,9 +55,12 @@ def is_pcap(pcap):
         return False
 
 def _run_ids(runner, pcap):
-    """Runs the specified IDS runner.
-    @param runner: Runner instance to use
-    @param pcap: File path to pcap for analysis
+    """
+    Runs the specified IDS runner.
+
+    :param runner: Runner instance to use
+    :param pcap: File path to pcap for analysis
+    :returns: dict of run metadata/alerts
     """
     run = {'name': runner.conf.get('name'),
            'module': runner.conf.get('module'),
@@ -73,9 +80,11 @@ def _run_ids(runner, pcap):
     return run
 
 def run(pcap):
-    """Runs configured ids instances against the supplied pcap.
-    @param pcap: File path to pcap file to analyse
-    @return: Dict with details and results of run/s
+    """
+    Runs all configured IDS instances against the supplied pcap.
+
+    :param pcap: File path to pcap file to analyse
+    :returns: Dict with details and results of run/s
     """
     start = datetime.now()
     errors = []
@@ -111,15 +120,3 @@ def run(pcap):
             'analyses': analyses,
             'errors': errors,
             }
-
-class IDSRunner(object):
-    """Interface of IDS Runners."""
-
-    conf = {}
-
-    def run(self, pcap):
-        """Run the IDS over the supplied pcap.
-        @param pcap: File path to PCAP for anlaysis.
-        @return: A tuple of version, alerts list.
-        """
-        pass

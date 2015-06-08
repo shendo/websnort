@@ -26,7 +26,11 @@ SYSTEM_PATH = "/etc/websnort"
 SOURCE_PATH = os.path.join(os.path.dirname(__file__), 'conf')
 
 def installed_location(filename):
-    """Returns the full path for the given installed file or None if not found.
+    """
+    Returns the full path for the given installed file or None if not found.
+
+    :param filename: The filename to search for.
+    :returns: The absolute filepath for the file or None if not installed.
     """
     try:
         return ResourceManager().resource_filename(Requirement.parse("websnort"), filename)
@@ -34,10 +38,19 @@ def installed_location(filename):
         return None
 
 class Config:
-    """Main config file parser for websnort.
-    """
     def __init__(self, cfg='websnort.conf'):
-        installed_path = installed_location(cfg) or 'notfound'
+        """
+        Main config file parser for websnort.
+        Will search the following locations for the given config, 
+        in precedence order:
+        * ~/.websnort/
+        * /etc/websnort
+        * <package_install_location>
+        * <relative_to_source>
+
+        :param cfg: Config filename to parse.
+        """
+        installed_path = installed_location('conf/' + cfg) or 'notfound'
         parser = ConfigParser()
         parser.read([os.path.join(SOURCE_PATH, cfg),
                      installed_path,

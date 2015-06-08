@@ -34,12 +34,19 @@ VERSION_PATTERN = re.compile(
 class Snort(object):
 
     def __init__(self, conf):
+        """
+        Runner for interfacing with Sourecfire's Snort IDS.
+
+        :param conf: dict of ids config options
+        """
         self.conf = conf
 
     def _snort_cmd(self, pcap):
-        """Given a pcap filename, get the commandline to run.
-        @param pcap: Pcap filename to scan
-        @return: list of snort command args to scan supplied pcap file
+        """
+        Given a pcap filename, get the commandline to run.
+
+        :param pcap: Pcap filename to scan
+        :returns: list of snort command args to scan supplied pcap file
         """
         cmdline = "'{0}' -A console -N -y -c '{1}' {2} -r '{3}'" \
             .format(self.conf['path'], self.conf['config'],
@@ -51,8 +58,11 @@ class Snort(object):
         return shlex.split(cmdline)
 
     def run(self, pcap):
-        """Runs snort against the supplied pcap.
-        @return: Dict with details/results of run
+        """
+        Runs snort against the supplied pcap.
+
+        :param pcap: Filepath to pcap file to scan
+        :returns: tuple of version, list of alerts
         """
         proc = Popen(self._snort_cmd(pcap), stdout=PIPE,
                      stderr=PIPE, universal_newlines=True)
@@ -65,9 +75,11 @@ class Snort(object):
                 [ x for x in parse_alert(stdout) ])
 
 def parse_version(output):
-    """Parses the supplied output and returns the version string.
-    @param output: A string containing the output of running snort.
-    @return: Version string for the version of snort run. None if not found.
+    """
+    Parses the supplied output and returns the version string.
+
+    :param output: A string containing the output of running snort.
+    :returns: Version string for the version of snort run. None if not found.
     """
     for x in output.splitlines():
         match = VERSION_PATTERN.match(x)
@@ -76,13 +88,14 @@ def parse_version(output):
     return None
 
 def parse_alert(output):
-    """Parses the supplied output and yields any alerts.
-    
+    """
+    Parses the supplied output and yields any alerts.
+
     Example alert format:
     01/28/14-22:26:04.885446  [**] [1:1917:11] INDICATOR-SCAN UPnP service discover attempt [**] [Classification: Detection of a Network Scan] [Priority: 3] {UDP} 10.1.1.132:58650 -> 239.255.255.250:1900
 
-    @param output: A string containing the output of running snort
-    @return: Generator of snort alert dicts
+    :param output: A string containing the output of running snort
+    :returns: Generator of snort alert dicts
     """
     for x in output.splitlines():
         match = ALERT_PATTERN.match(x)

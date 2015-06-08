@@ -17,7 +17,7 @@
 from datetime import datetime
 import time
 
-from websnort import runner
+from websnort import plugins, runner
 
 def test_duration():
     start = datetime(2014, 1, 1, 0, 0, 0, 3245)
@@ -31,14 +31,14 @@ def test_duration():
     assert runner.duration(start) >= 0.5
 
 def test_run_ids():
-    res = runner._run_ids(TestRunner(), None)
+    res = runner._run_ids(TestRunner(conf={}), None)
     assert res['version'] == '1.2.3-test'
     assert res['status'] == 'Success'
     assert len(res['alerts']) == 1
     assert res['alerts'][0]['message'] == 'test signature'
 
 
-class TestRunner(runner.IDSRunner):
+class TestRunner(plugins.IDSRunner):
 
     def run(self, pcap):
         return ('1.2.3-test',

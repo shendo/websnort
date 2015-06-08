@@ -36,13 +36,20 @@ VERSION_PATTERN = re.compile(
 class Suricata(object):
 
     def __init__(self, conf):
+        """
+        Runner for interfacing with OISF's Suricata IDS.
+
+        :param conf: dict of ids config options
+        """
         self.conf = conf
 
     def _suri_cmd(self, pcap, logs):
-        """Given a pcap filename, get the commandline to run.
-        @param pcap: Pcap filename to scan
-        @param logs: Output directory for logs
-        @return: list of command args to scan supplied pcap file
+        """
+        Given a pcap filename, get the commandline to run.
+
+        :param pcap: Pcap filename to scan
+        :param logs: Output directory for logs
+        :returns: list of command args to scan supplied pcap file
         """
         cmdline = "'{0}' -c '{1}' -l '{2}' {3} -r '{4}'" \
             .format(self.conf['path'], self.conf['config'],
@@ -54,8 +61,11 @@ class Suricata(object):
         return shlex.split(cmdline)
 
     def run(self, pcap):
-        """Runs suricata against the supplied pcap.
-        @return: Dict with details/results of run
+        """
+        Runs suricata against the supplied pcap.
+
+        :param pcap: Filepath to pcap file to scan
+        :returns: tuple of version, list of alerts
         """
         tmpdir = None
         try:
@@ -75,9 +85,11 @@ class Suricata(object):
                 shutil.rmtree(tmpdir)
 
 def parse_version(output):
-    """Parses the supplied output and returns the version string.
-    @param output: A string containing the output of running snort.
-    @return: Version string for the version of snort run. None if not found.
+    """
+    Parses the supplied output and returns the version string.
+
+    :param output: A string containing the output of running snort.
+    :returns: Version string for the version of snort run. None if not found.
     """
     for x in output.splitlines():
         match = VERSION_PATTERN.match(x)
@@ -86,13 +98,14 @@ def parse_version(output):
     return None
 
 def parse_alert(output):
-    """Parses the supplied output and yields any alerts.
-    
+    """
+    Parses the supplied output and yields any alerts.
+
     Example alert format:
     01/28/2014-22:26:04.885446  [**] [1:1917:11] INDICATOR-SCAN UPnP service discover attempt [**] [Classification: Detection of a Network Scan] [Priority: 3] {UDP} 10.1.1.132:58650 -> 239.255.255.250:1900
 
-    @param output: A string containing the the fast.log contents
-    @return: Generator of suricata alert dicts
+    :param output: A string containing the the fast.log contents
+    :returns: Generator of suricata alert dicts
     """
     for x in output.splitlines():
         match = ALERT_PATTERN.match(x)

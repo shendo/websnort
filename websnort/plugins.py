@@ -25,3 +25,22 @@ registry = {
 
 for modules in pkg_resources.iter_entry_points(group='websnort.ids'):
     registry[modules.name] = modules.load()
+
+class IDSRunner(object):
+
+    def __init__(self, conf):
+        """
+        Interface for IDS Runners.
+
+        :param conf: dict of config options for the given runner type.
+        """
+        self.conf = conf
+
+    def run(self, pcap):
+        """
+        Run the IDS over the supplied pcap.
+
+        :param pcap: File path to Pcap for analysis.
+        :returns: A tuple of version, alerts list.
+        """
+        pass
