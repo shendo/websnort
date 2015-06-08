@@ -6,7 +6,8 @@ Interactive
 -----------
 
 Use a web browser and navigate to the address the ``websnort`` webserver
-is listening on.  In these examples, the default http://localhost:8080.
+is listening on.  In these examples, the default URL http://localhost:8080
+is used.
 
 Simply select a pcap file for analysis and choose *Submit*.
 

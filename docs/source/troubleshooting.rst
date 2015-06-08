@@ -10,7 +10,7 @@ Why do I get a permission denied error from websnort?
 -----------------------------------------------------
 
 You need to ensure that snort/suricata can run as the same user running the
-web applicaton.  In particular check that all config files are readable by the
+web application.  In particular check that all config files are readable by the
 web user.  On Ubuntu recent packages of snort deploy */etc/snort/snort.conf* as
 root readable only.
 
@@ -43,20 +43,20 @@ If this is not working you may want to disable checksum validation for the IDS,
 especially if the pcaps were generated from a virtual network/sandbox or replay
 tool.
 
-Example in */etc/snort/snort.conf* add::
+For example, in */etc/snort/snort.conf* add::
 
  validate_checksums off
 
-In */etc/suricata/suricata.yaml* change::
+Or in */etc/suricata/suricata.yaml* change::
 
  stream:
    memcap: 128mb
    checksum-validation: no
  
-If your pcaps have some weird VLAN tagging and you are running Suricata, you
+If your pcaps have some unusual VLAN tagging and you are running Suricata, you
 may want to try disabling VLAN tracking in the sessionisation.
 
-Example in */etc/suricata/suricata.yaml* change::
+For example in */etc/suricata/suricata.yaml* change::
 
  vlan:
    use-for-tracking: false
