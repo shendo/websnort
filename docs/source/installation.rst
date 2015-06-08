@@ -5,7 +5,7 @@ Installation
 Dependencies
 ------------
 
-`websnort` relies on a user already having one or more functioning IDS
+``websnort`` relies on a user already having one or more functioning IDS
 installations on their deployment host.
 
 For help with installing `snort`_ please follow their documentation.
@@ -72,7 +72,7 @@ The config file format is as follows::
 Inbuilt Webserver
 -----------------
 
-`websnort` uses the python `bottle` framework to provide its web interface.
+``websnort`` uses the python ``bottle`` framework to provide its web interface.
 This provides the ability to run a simple webserver from the command-line.
 
 	usage: websnort [-h] [-H HOST] [-p PORT]
@@ -94,7 +94,7 @@ read any applicable config files.
 Python WSGI
 -----------
 
-`websnort` also provides an entrypoint for interfacing with other webservers
+``websnort`` also provides an entrypoint for interfacing with other webservers
 that support python WSGI.
 
 An example httpd config for apache could look something like the following::

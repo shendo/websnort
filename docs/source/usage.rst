@@ -5,7 +5,7 @@ Usage
 Interactive
 -----------
 
-Use a web browser and navigate to the address the `websnort` webserver
+Use a web browser and navigate to the address the ``websnort`` webserver
 is listening on.  In these examples, the default http://localhost:8080.
 
 Simply select a pcap file for analysis and choose *Submit*.
@@ -42,7 +42,7 @@ http://localhost:8080/api/submit.  For example, using curl::
 	    "status": "Success", 
 	    "errors": [], 
 	    "apiversion": "0.5", 
-	    "filename": "zeus-v3-sample-online.pcap", 
+	    "filename": "zeus-sample.pcap", 
 	    "start": "2015-06-08T13:18:37.839617", 
 	    "filesize": 905847, 
 	    "duration": 4.645783, 

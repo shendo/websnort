@@ -55,6 +55,11 @@ Browse to http://server:8080 and submit a pcap file for analysis.
 
 Navigate to http://server:8080/api for details of provided json web api.
 
+Documentation
+-------------
+
+Full project documentation can be found on `readthedocs`_.
+
 Issues
 ------
 
@@ -63,6 +68,7 @@ requests can be made using GitHub's `issues system`_.
 
 .. _GitHub: https://github.com/shendo/websnort
 .. _issues system: https://github.com/shendo/websnort/issues
+.. _readthedocs: https://websnort.readthedocs.org
 
 .. |build_status| image:: https://secure.travis-ci.org/shendo/websnort.png?branch=master
    :target: https://travis-ci.org/shendo/websnort
@@ -71,4 +77,3 @@ requests can be made using GitHub's `issues system`_.
 .. |pypi_version| image:: https://pypip.in/v/websnort/badge.png
    :target: https://pypi.python.org/pypi/websnort
    :alt: Latest PyPI version
-

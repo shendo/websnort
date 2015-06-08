@@ -18,7 +18,7 @@ The codebase is quite simple with the execution logic defined in
 Bottle App
 ----------
 
-And the web handling, `bottle` routes defined in `websnort.web`:
+And the web handling, ``bottle`` routes defined in `websnort.web`:
 
 .. automodule:: websnort.web
    :members: home, api_submit, submit_and_render
