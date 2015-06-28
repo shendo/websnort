@@ -31,7 +31,7 @@ to run pip as root/sudo.
 Run from Source
 ---------------
 
-The latest code can be run directly by cloning the github repository::
+The latest code can be run directly by cloning the GitHub repository::
 
     git clone https://github.com/shendo/websnort.git
 
@@ -83,7 +83,7 @@ This provides the ability to run a simple webserver from the command-line.
 	  -p PORT, --port PORT  Web server Port to bind to
 
 By default the webserver will bind to all network interfaces and run on port
-8080. Example to run on a different port number::
+8080. To run on a different port number::
 
 	websnort -p 8000
 

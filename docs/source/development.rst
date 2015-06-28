@@ -42,7 +42,7 @@ Pull Requests
 =============
 
 If you wish to contribute a bug fix or feature, please open a pull request on
-the Github project page for discussion/review.  While not strictly enforced,
+the `GitHub`_ project page for discussion/review.  While not strictly enforced,
 the code-style should follow python `PEP8`_ standard.
 
 Licensing
@@ -61,7 +61,8 @@ Issues
 
 If you have encountered a problem or need help in some aspect of the project
 you are probably not alone.  Please raise an issue in the `issue tracker`_ on
-the project's Github page so other users can benefit from the answers too.
+the project's GitHub page so other users can benefit from the answers too.
 
+.. _GitHub: https://github.com/shendo/websnort
 .. _PEP8: https://www.python.org/dev/peps/pep-0008/
 .. _issue tracker: https://github.com/shendo/websnort/issues
