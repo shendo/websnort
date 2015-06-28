@@ -23,7 +23,7 @@ from subprocess import PIPE, Popen
 ALERT_PATTERN = re.compile(
     r"(?P<timestamp>\d{2}/\d{2}/\d{2}-\d{2}:\d{2}:\d{2}\.\d+)\s+"
     r"\[\*\*\]\s+\[\d+:(?P<sid>\d+):(?P<revision>\d+)\] "
-    r"(?P<message>.+) \[\*\*\]\s+\[Classification: (?P<classtype>.+)\] "
+    r"(?P<message>.+) \[\*\*\]\s+(\[Classification: (?P<classtype>.+)\] ){0,1}"
     r"\[Priority: (?P<priority>\d+)\] \{(?P<protocol>\w+)\} "
     r"(?P<src>.+) \-\> (?P<dest>.+)")
 
@@ -100,13 +100,15 @@ def parse_alert(output):
     for x in output.splitlines():
         match = ALERT_PATTERN.match(x)
         if match:
-            yield {'timestamp': datetime.strptime(match.group('timestamp'),
+            rec = {'timestamp': datetime.strptime(match.group('timestamp'),
                                                   '%m/%d/%y-%H:%M:%S.%f'),
                    'sid': int(match.group('sid')),
                    'revision': int(match.group('revision')),
-                   'classtype': match.group('classtype'),
                    'message': match.group('message'),
                    'source': match.group('src'),
                    'destination': match.group('dest'),
                    'protocol': match.group('protocol'),
                    }
+            if match.group('classtype'):
+                rec['classtype'] = match.group('classtype')
+            yield rec
