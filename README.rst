@@ -74,6 +74,6 @@ requests can be made using GitHub's `issues system`_.
    :target: https://travis-ci.org/shendo/websnort
    :alt: Current build status
 
-.. |pypi_version| image:: https://pypip.in/v/websnort/badge.png
+.. |pypi_version| image:: https://img.shields.io/pypi/v/websnort.svg
    :target: https://pypi.python.org/pypi/websnort
    :alt: Latest PyPI version
