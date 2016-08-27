@@ -14,7 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from ConfigParser import ConfigParser
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
+try:
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
+
 import os
 from pkg_resources import DistributionNotFound, Requirement, ResourceManager
 

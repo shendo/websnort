@@ -16,6 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
 try:
     from gevent import monkey
     monkey.patch_all()
@@ -24,7 +27,6 @@ except ImportError:
     SERVER = 'wsgiref'
 
 import argparse
-from binascii import hexlify
 from datetime import datetime
 import hashlib
 import json
@@ -77,10 +79,10 @@ def analyse_pcap(infile, filename):
             size += len(buf)
             m.update(buf)
         tmp.close()
-        results['md5'] = hexlify(m.digest())
+        results['md5'] = m.hexdigest()
         results['filesize'] = size
         results.update(runner.run(tmp.name))
-    except OSError, ex:
+    except OSError as ex:
         results['stderr'] = str(ex)
     finally:
         os.remove(tmp.name)

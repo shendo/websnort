@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+
 from datetime import datetime
 from multiprocessing.pool import ThreadPool
 
@@ -49,8 +53,8 @@ def is_pcap(pcap):
     with open(pcap, 'rb') as tmp:
         header = tmp.read(4)
         # check for both big/little endian
-        if header == "\xa1\xb2\xc3\xd4" or \
-           header == "\xd4\xc3\xb2\xa1":
+        if header == b"\xa1\xb2\xc3\xd4" or \
+           header == b"\xd4\xc3\xb2\xa1":
             return True
         return False
 
@@ -73,7 +77,7 @@ def _run_ids(runner, pcap):
         run['version'] = version or 'Unknown'
         run['status'] = STATUS_SUCCESS
         run['alerts'] = alerts
-    except Exception, ex:
+    except Exception as ex:
         run['error'] = str(ex)
     finally:
         run['duration'] = duration(run_start)
@@ -111,7 +115,7 @@ def run(pcap):
         # propagate any errors to the main list
         for run in [ x for x in analyses if x['status'] != STATUS_SUCCESS ]:
             errors.append("Failed to run {0}: {1}".format(run['name'], run['error']))
-    except Exception, ex:
+    except Exception as ex:
         errors.append(str(ex))
 
     return {'start': start,
