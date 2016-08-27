@@ -31,14 +31,14 @@ def test_duration():
     assert runner.duration(start) >= 0.5
 
 def test_run_ids():
-    res = runner._run_ids(TestRunner(conf={}), None)
+    res = runner._run_ids(CustomRunner(conf={}), None)
     assert res['version'] == '1.2.3-test'
     assert res['status'] == 'Success'
     assert len(res['alerts']) == 1
     assert res['alerts'][0]['message'] == 'test signature'
 
 
-class TestRunner(plugins.IDSRunner):
+class CustomRunner(plugins.IDSRunner):
 
     def run(self, pcap):
         return ('1.2.3-test',
