@@ -107,6 +107,7 @@ def parse_alert(output):
                                                   '%m/%d/%y-%H:%M:%S.%f'),
                    'sid': int(match.group('sid')),
                    'revision': int(match.group('revision')),
+                   'priority': int(match.group('priority')),
                    'message': match.group('message'),
                    'source': match.group('src'),
                    'destination': match.group('dest'),

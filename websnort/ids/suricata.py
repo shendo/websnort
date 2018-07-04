@@ -117,6 +117,7 @@ def parse_alert(output):
                                                   '%m/%d/%Y-%H:%M:%S.%f'),
                    'sid': int(match.group('sid')),
                    'revision': int(match.group('revision')),
+                   'priority': int(match.group('priority')),
                    'message': match.group('message'),
                    'source': match.group('src'),
                    'destination': match.group('dest'),
@@ -125,4 +126,3 @@ def parse_alert(output):
             if match.group('classtype'):
                 rec['classtype'] = match.group('classtype')
             yield rec
-
